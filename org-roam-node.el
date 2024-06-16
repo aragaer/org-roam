@@ -745,13 +745,13 @@ Assumes that the cursor was put where the link is."
       (let* ((link (or link (org-element-context)))
              (type (org-element-property :type link))
              (path (org-element-property :path link))
-             (desc (and (org-element-property :contents-begin link)
-                        (org-element-property :contents-end link)
+             (desc (and (org-roam-element-contents-begin link)
+                        (org-roam-element-contents-end link)
                         (buffer-substring-no-properties
-                         (org-element-property :contents-begin link)
-                         (org-element-property :contents-end link))))
+                         (org-roam-element-contents-begin link)
+                         (org-roam-element-contents-end link))))
              node)
-        (goto-char (org-element-property :begin link))
+        (goto-char (org-roam-element-begin link))
         (when (and (org-in-regexp org-link-any-re 1)
                    (string-equal type "roam")
                    (setq node (save-match-data (org-roam-node-from-title-or-alias path))))
@@ -905,7 +905,7 @@ If region is active, then use it instead of the node at point."
             (org-kill-new (buffer-substring region-start region-end))
             (org-save-markers-in-region region-start region-end))
         (progn
-          (if (org-before-first-heading-p)
+         (if (org-before-first-heading-p)
               (org-roam-demote-entire-buffer))
           (org-copy-subtree 1 nil t)))
       (with-current-buffer nbuf
